@@ -14,6 +14,12 @@ int main()
     scanf("%d",&at[i]);
     printf("Enter burst time for Process P%d : ",i+1);
     scanf("%d",&bt[i]);
+    if(bt[i]>10)
+    {
+      printf("\nBurst time should be less than 10\n");
+      printf("Enter burst time for Process P%d : ",i+1);
+      scanf("%d",&bt[i]);
+    }
     rt[i]=bt[i];
   }
 
@@ -21,6 +27,10 @@ int main()
   rt[9]=9999;
   for(time=0;r!=n;time++)
   {
+    if(time<3)
+      sleep(1);
+    else
+    {
       s=9;
       
       for(i=0;i<n;i++)
@@ -41,6 +51,7 @@ int main()
           sumw+=end-bt[s]-at[s];
           sumt+=end-at[s];
         }
+    }
    }
   
 
