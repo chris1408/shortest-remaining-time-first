@@ -1,10 +1,34 @@
 #include<stdio.h>
 #include<unistd.h>
 
+int at[10],bt[10],rt[10],end,i,s;
+int r=0,n,t,sumw=0,sumt=0;
+int ct[10],p[10],k=0,j;
+
+void sort()
+{
+    int temp;
+    for (i = 0; i < n; i++)
+    {
+        for (j = i + 1; j < n; j++)
+        {
+            if (p[i] > p[j])
+            {
+                temp= p[i];
+                p[i] = p[j];
+                p[j] = temp;
+                
+                temp = ct[i];
+                ct[i] = ct[j];
+                ct[j] = temp;
+            }
+ 
+        }
+    }
+}
+
 int main()
 {
-  int at[10],bt[10],rt[10],end,i,s;
-  int r=0,n,time,sumw=0,sumt=0;
   printf("No of Processes : ");
   scanf("%d",&n);
   
@@ -25,9 +49,9 @@ int main()
 
   printf("\n\nProcess\t|Turnaround Time| Waiting Time\n\n");
   rt[9]=9999;
-  for(time=0;r!=n;time++)
+  for(t=0;r!=n;t++)
   {
-    if(time<3)
+    if(t<3)
       sleep(1);
     else
     {
@@ -35,7 +59,7 @@ int main()
       
       for(i=0;i<n;i++)
       {
-        if(at[i]<=time && rt[i]<rt[s] && rt[i]>0)
+        if(at[i]<=t && rt[i]<rt[s] && rt[i]>0)
         {
           s=i;
         }
@@ -46,17 +70,22 @@ int main()
       if(rt[s]==0)
         {
           r++;
-          end=time+1;
-          printf("\nP[%d]\t|\t%d\t|\t%d",s+1,end-at[s],end-bt[s]-at[s]);
+          end=t+1;
+          ct[k]=end;
+          p[k]=s;
+          k++;
           sumw+=end-bt[s]-at[s];
           sumt+=end-at[s];
         }
     }
    }
+  sort();
   
-
-  printf("\n\nAverage waiting time = %f\n",sumw*1.0/n);
-  printf("Average Turnaround time = %f",sumt*1.0/5);
-  return 0;
+  for(i=0;i<k;i++)
+    printf("\nP[%d]\t|\t%d\t|\t%d\t|\t%d\t|\t%d\t|\t%d",p[i]+1,at[i],bt[i],ct[p[i]],ct[p[i]]-at[p[i]],ct[p[i]]-bt[p[i]]-at[p[i]]);
+  
+  printf("\n\nAverage waiting time = %.2f\n",sumw*1.0/n);
+  printf("Average Turnaround time = %.2f\n",sumt*1.0/5);
+}
 
 }
