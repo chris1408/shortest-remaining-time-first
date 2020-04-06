@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<unistd.h>
+#include<pthread.h>
 
 int at[10],bt[10],rt[10],end,i,s;
 int r=0,n,t,sumw=0,sumt=0;
@@ -25,6 +26,31 @@ void sort()
  
         }
     }
+}
+
+void *srtf()
+{
+  s=9;
+  for(i=0;i<n;i++)
+  {
+    if(at[i]<=t && rt[i]<rt[s] && rt[i]>0)
+    {
+      s=i;
+    }
+  }
+  
+  rt[s]--;
+  
+  if(rt[s]==0)
+  {
+    r++;
+    end=t+1;
+    ct[k]=end;
+    p[k]=s;
+    k++;
+    sumw+=end-bt[s]-at[s];
+    sumt+=end-at[s];
+  }
 }
 
 int main()
@@ -55,30 +81,10 @@ int main()
       sleep(1);
     else
     {
-      s=9;
-      
-      for(i=0;i<n;i++)
-      {
-        if(at[i]<=t && rt[i]<rt[s] && rt[i]>0)
-        {
-          s=i;
-        }
-      }
-      
-      rt[s]--;
-      
-      if(rt[s]==0)
-        {
-          r++;
-          end=t+1;
-          ct[k]=end;
-          p[k]=s;
-          k++;
-          sumw+=end-bt[s]-at[s];
-          sumt+=end-at[s];
-        }
+      pthread_create(&processes[r], NULL, srtf, NULL);
+      pthread_join(processes[r], NULL);
     }
-   }
+  }
   sort();
   
   for(i=0;i<k;i++)
